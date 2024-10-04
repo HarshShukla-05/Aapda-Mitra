@@ -7,14 +7,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class SingupScreen extends StatefulWidget {
-  const SingupScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<SingupScreen> createState() => _SingupScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SingupScreenState extends State<SingupScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   //Obscured
   bool _passwordObscured = true;
   bool _passwordConfirmObscured = true;
