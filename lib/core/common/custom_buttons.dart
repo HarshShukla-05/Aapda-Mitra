@@ -1,4 +1,4 @@
-import 'package:aapda_mitra/core/constants/constants.dart';
+import 'package:aapda_mitra/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomPrimaryButton extends StatelessWidget {
@@ -52,7 +52,7 @@ class CustomPrimaryButton extends StatelessWidget {
             style: textStyle ??
                 TextStyle(
                     color: textColor ?? Colors.white,
-                    fontFamily: Constants.inter,
+                    fontFamily: AppTheme.secondaryFont,
                     fontWeight: FontWeight.w600),
           )),
     );
