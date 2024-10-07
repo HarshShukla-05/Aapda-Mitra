@@ -339,6 +339,21 @@ class _AgencyHomeScreenState extends State<AgencyHomeScreen> {
           ),
         ),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 30.0),
+        child: Container(
+          decoration: const BoxDecoration(
+              color: AppTheme.primaryColor, shape: BoxShape.circle),
+          child: IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                Constants.locationIcon,
+                color: Colors.white,
+                width: 25,
+                height: 25,
+              )),
+        ),
+      ),
       bottomNavigationBar:
           BottomNavigationBar(type: BottomNavigationBarType.fixed, items: [
         BottomNavigationBarItem(
