@@ -12,13 +12,15 @@ class LandingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
             Color.fromRGBO(73, 174, 192, 1),
             Color.fromRGBO(53, 138, 159, 1)
-          ])),
+          ],
+        ),
+      ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(

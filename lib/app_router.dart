@@ -1,4 +1,5 @@
 import 'package:aapda_mitra/core/constants/app_routes.dart';
+import 'package:aapda_mitra/screens/agency_homescreen.dart';
 import 'package:aapda_mitra/screens/landing_screen.dart';
 import 'package:aapda_mitra/screens/login_screen.dart';
 import 'package:aapda_mitra/screens/signup_screen.dart';
@@ -23,6 +24,12 @@ class AppRoutes {
       path: Routes.loginInPageRoute,
       pageBuilder: (context, state) {
         return const MaterialPage(child: LoginScreen());
+      },
+    ),
+    GoRoute(
+      path: Routes.agencyHomePageRoute,
+      pageBuilder: (context, state) {
+        return const MaterialPage(child: AgencyHomeScreen());
       },
     ),
   ]);

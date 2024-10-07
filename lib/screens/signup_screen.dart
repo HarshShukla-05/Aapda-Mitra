@@ -101,6 +101,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               firstNameFocusNode.unfocus();
                               lastNameFocusNode.requestFocus();
                             },
+                            style: const TextStyle(
+                                fontSize: 14, color: Color(0xFF4F4F4F)),
                             decoration: const InputDecoration(
                               hintText: "First Name",
                               hintStyle: TextStyle(
@@ -296,7 +298,7 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         Center(
           child: SizedBox(
-            width: 190,
+            width: 100,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

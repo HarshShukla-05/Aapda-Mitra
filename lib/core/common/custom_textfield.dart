@@ -82,7 +82,8 @@ class _CustomTextfieldState extends State<CustomTextfield> {
             onSubmitted: widget.onSubmitted,
             inputFormatters: widget.inputFormatters,
             enabled: widget.enabled,
-            style: widget.keyBoardTextstyle ?? const TextStyle(fontSize: 14),
+            style: widget.keyBoardTextstyle ??
+                const TextStyle(fontSize: 14, color: Color(0xFF4F4F4F)),
             onTap: widget.onTap,
             onTapOutside: widget.onTapOutside,
             obscureText: widget.obscureText ?? false,

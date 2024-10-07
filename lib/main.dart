@@ -1,5 +1,5 @@
 import 'package:aapda_mitra/app_theme.dart';
-import 'package:aapda_mitra/router.dart';
+import 'package:aapda_mitra/app_router.dart';
 import 'package:flutter/material.dart';
 
 void main() {

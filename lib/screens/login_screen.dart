@@ -111,8 +111,9 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 20,
               ),
-              const Center(
+              Center(
                 child: CustomPrimaryButton(
+                  onPressed: () => context.go(Routes.agencyHomePageRoute),
                   buttonText: "Log in",
                   buttonWidth: 400,
                   margin: EdgeInsets.zero,
@@ -167,9 +168,9 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         Center(
           child: SizedBox(
-            width: 190,
+            width: 150,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Flexible(
                   child: InkWell(
