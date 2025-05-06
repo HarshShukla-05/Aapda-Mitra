@@ -1,8 +1,10 @@
 import 'package:aapda_mitra/app_theme.dart';
 import 'package:aapda_mitra/core/common/custom_buttons.dart';
 import 'package:aapda_mitra/core/common/custom_textfield.dart';
+import 'package:aapda_mitra/core/common/message.dart';
 import 'package:aapda_mitra/core/constants/app_routes.dart';
 import 'package:aapda_mitra/core/constants/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   //Obscured
   bool _passwordObscured = true;
-
+  bool _isLoading = false;
   // TextEditingController
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -25,6 +27,42 @@ class _LoginScreenState extends State<LoginScreen> {
   // FocusNode
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
+
+  bool validateFields() {
+    if (emailController.text.trim().isEmpty) {
+      showMessage(context, "Please Enter Email");
+      return false;
+    } else if (passwordController.text.isEmpty) {
+      showMessage(context, "Please Enter Password");
+      return false;
+    } else if (passwordController.text.trim().length < 8) {
+      showMessage(context, "Password should be atleast 8 characters");
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<void> loginUser() async {
+    try {
+      final userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim());
+
+      if (mounted) {
+        showMessage(context, 'Logged in successfully');
+        context.go(Routes.agencyHomePageRoute);
+      }
+      debugPrint('Logged in successfully $userCredential');
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        showMessage(context, e.message!);
+      }
+      debugPrint(e.message);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +151,19 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Center(
                 child: CustomPrimaryButton(
-                  onPressed: () => context.go(Routes.agencyHomePageRoute),
+                  isLoading: _isLoading,
+                  onPressed: () async {
+                    if (validateFields()) {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      await loginUser();
+
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }
+                  },
                   buttonText: "Log in",
                   buttonWidth: 400,
                   margin: EdgeInsets.zero,

@@ -1,8 +1,11 @@
 import 'package:aapda_mitra/app_theme.dart';
 import 'package:aapda_mitra/core/common/custom_buttons.dart';
 import 'package:aapda_mitra/core/common/custom_textfield.dart';
+import 'package:aapda_mitra/core/common/message.dart';
 import 'package:aapda_mitra/core/constants/app_routes.dart';
 import 'package:aapda_mitra/core/constants/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +21,7 @@ class _SignupScreenState extends State<SignupScreen> {
   //Obscured
   bool _passwordObscured = true;
   bool _passwordConfirmObscured = true;
-
+  bool _isLoading = false;
   //TextEditingController
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -40,6 +43,62 @@ class _SignupScreenState extends State<SignupScreen> {
     firstNameFocusNode.dispose();
     lastNameFocusNode.dispose();
     super.dispose();
+  }
+
+  bool validateFields() {
+    if (firstNameController.text.isEmpty && lastNameController.text.isEmpty) {
+      showMessage(context, "Please Enter Full Name");
+      return false;
+    } else if (emailController.text.trim().isEmpty) {
+      showMessage(context, "Please Enter Email");
+      return false;
+    } else if (passwordController.text.isEmpty &&
+        confirmPasswordController.text.isEmpty) {
+      showMessage(context, "Please Enter Password");
+      return false;
+    } else if (confirmPasswordController.text.trim().length < 8) {
+      showMessage(context, "Password should be atleast 8 characters");
+      return false;
+    } else if (passwordController.text.trim().length < 8) {
+      showMessage(context, "Password should be atleast 8 characters");
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<void> registerUser() async {
+    try {
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim());
+      User? user = userCredential.user;
+      if (user != null) {
+        await user.updateProfile(
+            displayName:
+                '${firstNameController.text} ${lastNameController.text}');
+        await user.reload();
+      }
+      // Step 3: Store additional data (like first name, last name) in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(user?.uid).set({
+        'first_name': firstNameController.text,
+        'last_name': lastNameController.text,
+        'email': emailController.text,
+      });
+
+      // Step 4: User successfully registered
+      if (mounted) {
+        showMessage(context, 'User successfully registered');
+        context.go(Routes.loginInPageRoute);
+      }
+      debugPrint('User successfully registered');
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        showMessage(context, e.message!);
+      }
+      debugPrint(e.message);
+    }
   }
 
   @override
@@ -199,6 +258,10 @@ class _SignupScreenState extends State<SignupScreen> {
                 controller: passwordController,
                 focusNode: passwordFocusNode,
                 onEditingComplete: () {
+                  if (passwordController.text.trim().length < 8) {
+                    showMessage(
+                        context, "Password should be atleast 8 characters");
+                  }
                   passwordFocusNode.unfocus();
                   confirmPasswordFocusNode.requestFocus();
                 },
@@ -224,6 +287,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 controller: confirmPasswordController,
                 focusNode: confirmPasswordFocusNode,
                 onEditingComplete: () {
+                  if (passwordController.text.trim() !=
+                      confirmPasswordController.text.trim()) {
+                    showMessage(context, "Password doesn't match");
+                  }
+                  if (confirmPasswordController.text.trim().length < 8) {
+                    showMessage(
+                        context, "Password should be atleast 8 characters");
+                  }
+
                   confirmPasswordFocusNode.unfocus();
                 },
                 suffixIcon: IconButton(
@@ -242,12 +314,24 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(
                 height: 35,
               ),
-              const Center(
+              Center(
                 child: CustomPrimaryButton(
+                  isLoading: _isLoading,
                   buttonText: "Register",
                   buttonWidth: 400,
                   margin: EdgeInsets.zero,
                   buttonHeight: 54,
+                  onPressed: () async {
+                    if (validateFields()) {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      await registerUser();
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    }
+                  },
                 ),
               ),
               const SizedBox(

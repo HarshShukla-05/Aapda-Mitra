@@ -57,6 +57,7 @@ class LandingScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomPrimaryButton(
+                    isLoading: false,
                     buttonText: "CITIZEN",
                     buttonBackgroundColor: Colors.white,
                     textColor: Colors.black,
@@ -66,6 +67,7 @@ class LandingScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomPrimaryButton(
+                    isLoading: false,
                     buttonText: "AGENCY",
                     buttonBackgroundColor: Colors.transparent,
                     decoration: BoxDecoration(

@@ -14,7 +14,7 @@ class CustomPrimaryButton extends StatelessWidget {
   final FocusNode? focusNode;
   final Function()? onPressed;
   final Function(bool)? onFocusChange;
-
+  final bool isLoading;
   const CustomPrimaryButton(
       {super.key,
       required this.buttonText,
@@ -28,7 +28,8 @@ class CustomPrimaryButton extends StatelessWidget {
       this.margin,
       this.focusNode,
       this.onPressed,
-      this.onFocusChange});
+      this.onFocusChange,
+      required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +48,24 @@ class CustomPrimaryButton extends StatelessWidget {
           style: style,
           onPressed: onPressed,
           onFocusChange: onFocusChange,
-          child: Text(
-            buttonText,
-            style: textStyle ??
-                TextStyle(
-                    color: textColor ?? Colors.white,
-                    fontFamily: AppTheme.secondaryFont,
-                    fontWeight: FontWeight.w600),
-          )),
+          child: isLoading
+              ? const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(3.0),
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 3,
+                    ),
+                  ),
+                )
+              : Text(
+                  buttonText,
+                  style: textStyle ??
+                      TextStyle(
+                          color: textColor ?? Colors.white,
+                          fontFamily: AppTheme.secondaryFont,
+                          fontWeight: FontWeight.w600),
+                )),
     );
   }
 }
